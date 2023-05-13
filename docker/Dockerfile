@@ -8,13 +8,13 @@ LABEL maintainer="Bo-Yi Wu <appleboy.tw@gmail.com>" \
   org.label-schema.vendor="Bo-Yi Wu" \
   org.label-schema.schema-version="1.0"
 
-LABEL org.opencontainers.image.source=https://github.com/appleboy/drone-secrets
+LABEL org.opencontainers.image.source=https://github.com/appleboy/drone-secret-sync
 LABEL org.opencontainers.image.description="Synchronize Drone Secrets"
 LABEL org.opencontainers.image.licenses=MIT
 
 RUN apk add --no-cache ca-certificates=20230506-r0 && \
   rm -rf /var/cache/apk/*
 
-COPY release/${TARGETOS}/${TARGETARCH}/drone-secrets /bin/
+COPY release/${TARGETOS}/${TARGETARCH}/drone-secret-sync /bin/
 
-ENTRYPOINT ["/bin/drone-secrets"]
+ENTRYPOINT ["/bin/drone-secret-sync"]

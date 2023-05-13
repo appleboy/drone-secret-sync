@@ -1,4 +1,4 @@
-EXECUTABLE := drone-secrets
+EXECUTABLE := drone-secret-sync
 GO ?= go
 SHASUM ?= shasum -a 256
 GOFILES := $(shell find . -name "*.go" -type f)

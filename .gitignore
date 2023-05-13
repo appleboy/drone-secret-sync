@@ -20,5 +20,5 @@
 # Go workspace file
 go.work
 .env
-drone-secrets
+drone-secret-sync
 coverage.txt

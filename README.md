@@ -1,6 +1,6 @@
-# drone-secrets
+# drone-secret-sync
 
-[![Lint and Testing](https://github.com/appleboy/drone-secrets/actions/workflows/lint.yml/badge.svg?branch=main)](https://github.com/appleboy/drone-secrets/actions/workflows/lint.yml)
+[![Lint and Testing](https://github.com/appleboy/drone-secret-sync/actions/workflows/lint.yml/badge.svg?branch=main)](https://github.com/appleboy/drone-secret-sync/actions/workflows/lint.yml)
 
 Synchronize Drone secrets across multiple organizations or repository configurations.
 
@@ -14,7 +14,7 @@ This package uses the Drone API to synchronize secrets across multiple organizat
 
 ### Using CLI
 
-As CLI tool, download the latest release from [GitHub](https://github.com/appleboy/drone-secrets/releases) and run the following command:
+As CLI tool, download the latest release from [GitHub](https://github.com/appleboy/drone-secret-sync/releases) and run the following command:
 
 Create .env file
 
@@ -30,7 +30,7 @@ FOOBAR2=1234
 and execute the following command:
 
 ```sh
-drone-secrets
+drone-secret-sync
 ```
 
 The following command will sync the `FOOBAR2` secret to the `appleboy` organization and `go-training/golang-in-ecr-ecs` and `go-training/drone-git-push-example` repositories. See the following output:
@@ -59,7 +59,7 @@ steps:
 
 - name: publish
   pull: always
-  image: ghcr.io/appleboy/drone-secrets:1
+  image: ghcr.io/appleboy/drone-secret-sync:1
   settings:
     drone_token:
       from_secret: drone_token

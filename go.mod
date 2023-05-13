@@ -1,4 +1,4 @@
-module github.com/appleboy/drone-secrets
+module github.com/appleboy/drone-secret-sync
 
 go 1.20
 

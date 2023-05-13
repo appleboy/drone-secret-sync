@@ -10,7 +10,7 @@ steps:
 
 - name: publish
   pull: always
-  image: ghcr.io/appleboy/drone-secrets:1
+  image: ghcr.io/appleboy/drone-secret-sync:1
   settings:
     drone_token:
       from_secret: drone_token
