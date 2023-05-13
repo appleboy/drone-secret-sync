@@ -14,9 +14,7 @@ This package uses the Drone API to synchronize secrets across multiple organizat
 
 ### Using CLI
 
-As CLI tool, download the latest release from [GitHub](https://github.com/appleboy/drone-secret-sync/releases) and run the following command:
-
-Create .env file
+Create a `.env` file with the following content. You can also use the `export` command to set the environment variables.
 
 ```sh
 DRONE_SERVER=https://cloud.drone.io
@@ -27,13 +25,19 @@ KEY_LIST=FOOBAR2
 FOOBAR2=1234
 ```
 
-and execute the following command:
+* DRONE_SERVER: Drone server URL.
+* DRONE_TOKEN: Drone token.
+* ORG_LIST: Comma-separated list of organizations.
+* REPO_LIST: Comma-separated list of repositories.
+* KEY_LIST: Comma-separated list of secret keys.
+
+Download the latest release from [GitHub](https://github.com/appleboy/drone-secret-sync/releases) and run the following command:
 
 ```sh
 drone-secret-sync
 ```
 
-The following command will sync the `FOOBAR2` secret to the `appleboy` organization and `go-training/golang-in-ecr-ecs` and `go-training/drone-git-push-example` repositories. See the following output:
+The above command will sync the `FOOBAR2` secret to the `appleboy` organization and `go-training/golang-in-ecr-ecs` and `go-training/drone-git-push-example` repositories. See the following output:
 
 ```sh
 login user: appleboy
