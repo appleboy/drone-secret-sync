@@ -1,5 +1,7 @@
 # drone-secrets
 
+[![Lint and Testing](https://github.com/appleboy/drone-secrets/actions/workflows/lint.yml/badge.svg?branch=main)](https://github.com/appleboy/drone-secrets/actions/workflows/lint.yml)
+
 Synchronize Drone secrets across multiple organizations or repository configurations.
 
 ## Motivation
