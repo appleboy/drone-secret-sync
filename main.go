@@ -70,12 +70,12 @@ func main() {
 
 	// update org secrets
 	for _, org := range orgList {
+		// get all org secrets
 		secretMaps := make(map[string]string)
 		allSecrets, err := client.OrgSecretList(org)
 		if err != nil {
 			panic("get org secret failed: " + err.Error())
 		}
-
 		for _, secret := range allSecrets {
 			secretMaps[secret.Name] = secret.Data
 		}
@@ -115,10 +115,29 @@ func main() {
 		}
 		owner := val[0]
 		name := val[1]
+
+		// get all org secrets
+		secretMaps := make(map[string]string)
+		allSecrets, err := client.SecretList(owner, name)
+		if err != nil {
+			panic("get repo secret failed: " + err.Error())
+		}
+		for _, secret := range allSecrets {
+			secretMaps[secret.Name] = secret.Data
+		}
+
 		for k, v := range secrets {
-			// delete org secret
-			if err := client.SecretDelete(owner, name, k); err != nil {
-				panic("delete repo secret failed: " + err.Error())
+			// update repo secret
+			if _, ok := secretMaps[k]; ok {
+				// create repo secret
+				if _, err := client.SecretUpdate(owner, name, &drone.Secret{
+					Name: k,
+					Data: v,
+				}); err != nil {
+					panic("update repo secret failed: " + err.Error())
+				}
+				fmt.Printf("repo: %s, update secret key: %s\n", repo, k)
+				continue
 			}
 
 			// create org secret
@@ -128,6 +147,7 @@ func main() {
 			}); err != nil {
 				panic("delete repo secret failed: " + err.Error())
 			}
+			fmt.Printf("repo: %s, update secret key: %s\n", repo, k)
 		}
 	}
 }
