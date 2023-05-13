@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"fmt"
 	"os"
@@ -37,7 +38,7 @@ func main() {
 	// create an http client with oauth authentication.
 	cfg := new(oauth2.Config)
 	auther := cfg.Client(
-		oauth2.NoContext,
+		context.Background(),
 		&oauth2.Token{
 			AccessToken: token,
 		},
