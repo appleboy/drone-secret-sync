@@ -11,7 +11,10 @@ import (
 	"golang.org/x/oauth2"
 )
 
-var secrets = make(map[string]string)
+var (
+	secrets = make(map[string]string)
+	Version string
+)
 
 func main() {
 	var envfile string
