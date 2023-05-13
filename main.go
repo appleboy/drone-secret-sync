@@ -11,7 +11,7 @@ import (
 	"golang.org/x/oauth2"
 )
 
-var secrets map[string]string
+var secrets = make(map[string]string)
 
 func main() {
 	var envfile string
@@ -48,7 +48,7 @@ func main() {
 	if err != nil {
 		panic("get user failed: " + err.Error())
 	}
-	fmt.Printf("login user: %s", user.Login)
+	fmt.Printf("login user: %s\n", user.Login)
 
 	orgValue := getGlobalValue("org_list")
 	orgList := strings.Split(orgValue, ",")
@@ -70,10 +70,29 @@ func main() {
 
 	// update org secrets
 	for _, org := range orgList {
+		secretMaps := make(map[string]string)
+		allSecrets, err := client.OrgSecretList(org)
+		if err != nil {
+			panic("get org secret failed: " + err.Error())
+		}
+
+		for _, secret := range allSecrets {
+			secretMaps[secret.Name] = secret.Data
+		}
+
 		for k, v := range secrets {
-			// delete org secret
-			if err := client.OrgSecretDelete(org, k); err != nil {
-				panic("delete org secret failed: " + err.Error())
+			// update org secret
+			if _, ok := secretMaps[k]; ok {
+				// create org secret
+				if _, err := client.OrgSecretUpdate(org, &drone.Secret{
+					Namespace: org,
+					Name:      k,
+					Data:      v,
+				}); err != nil {
+					panic("update org secret failed: " + err.Error())
+				}
+				fmt.Printf("org: %s, update secret key: %s\n", org, k)
+				continue
 			}
 
 			// create org secret
@@ -84,6 +103,7 @@ func main() {
 			}); err != nil {
 				panic("delete org secret failed: " + err.Error())
 			}
+			fmt.Printf("org: %s, create secret key: %s\n", org, k)
 		}
 	}
 
