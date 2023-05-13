@@ -1,17 +1,25 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"os"
 	"strings"
 
 	"github.com/drone/drone-go/drone"
+	"github.com/joho/godotenv"
 	"golang.org/x/oauth2"
 )
 
 var secrets map[string]string
 
 func main() {
+	var envfile string
+	flag.StringVar(&envfile, "env-file", ".env", "Read in a file of environment variables")
+	flag.Parse()
+
+	_ = godotenv.Load(envfile)
+
 	token := getGlobalValue("drone_token")
 	host := getGlobalValue("drone_server")
 

@@ -4,6 +4,7 @@ go 1.20
 
 require (
 	github.com/drone/drone-go v1.7.1
+	github.com/joho/godotenv v1.5.1
 	golang.org/x/oauth2 v0.8.0
 )
 
