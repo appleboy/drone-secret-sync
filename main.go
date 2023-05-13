@@ -9,6 +9,8 @@ import (
 	"golang.org/x/oauth2"
 )
 
+var secrets map[string]string
+
 func main() {
 	token := getGlobalValue("drone_token")
 	host := getGlobalValue("drone_server")
@@ -22,8 +24,8 @@ func main() {
 	}
 
 	// create an http client with oauth authentication.
-	config := new(oauth2.Config)
-	auther := config.Client(
+	cfg := new(oauth2.Config)
+	auther := cfg.Client(
 		oauth2.NoContext,
 		&oauth2.Token{
 			AccessToken: token,
@@ -39,6 +41,67 @@ func main() {
 		panic("get user failed: " + err.Error())
 	}
 	fmt.Printf("login user: %s", user.Login)
+
+	orgValue := getGlobalValue("org_list")
+	orgList := strings.Split(orgValue, ",")
+	repoValue := getGlobalValue("repo_list")
+	repoList := strings.Split(repoValue, ",")
+	keyValue := getGlobalValue("key_list")
+	keyList := strings.Split(keyValue, ",")
+
+	for _, key := range keyList {
+		// check value is empty
+		value := getGlobalValue(key)
+		if value == "" {
+			continue
+		}
+
+		key = strings.ToLower(key) // Convert key to lowercase
+		secrets[key] = value
+	}
+
+	// update org secrets
+	for _, org := range orgList {
+		for k, v := range secrets {
+			// delete org secret
+			if err := client.OrgSecretDelete(org, k); err != nil {
+				panic("delete org secret failed: " + err.Error())
+			}
+
+			// create org secret
+			if _, err := client.OrgSecretCreate(org, &drone.Secret{
+				Namespace: org,
+				Name:      k,
+				Data:      v,
+			}); err != nil {
+				panic("delete org secret failed: " + err.Error())
+			}
+		}
+	}
+
+	// update repo secrets
+	for _, repo := range repoList {
+		val := strings.Split(repo, "/")
+		if len(val) != 2 {
+			continue
+		}
+		owner := val[0]
+		name := val[1]
+		for k, v := range secrets {
+			// delete org secret
+			if err := client.SecretDelete(owner, name, k); err != nil {
+				panic("delete repo secret failed: " + err.Error())
+			}
+
+			// create org secret
+			if _, err := client.SecretCreate(owner, name, &drone.Secret{
+				Name: k,
+				Data: v,
+			}); err != nil {
+				panic("delete repo secret failed: " + err.Error())
+			}
+		}
+	}
 }
 
 func getGlobalValue(key string) string {
