@@ -67,8 +67,8 @@ steps:
   settings:
     drone_token:
       from_secret: drone_token
-    drone_host:
-      from_secret: drone_host
+    drone_server:
+      from_secret: drone_server
     org_list: appleboy,go-training
     repo_list: go-training/golang-in-ecr-ecs,go-training/drone-git-push-example
     key_list: foobar,docker_test_username,docker_test_token
