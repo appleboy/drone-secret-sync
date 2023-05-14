@@ -8,7 +8,7 @@ import (
 func TestGetGlobalValue(t *testing.T) {
 	// Simulate environment variables
 	os.Setenv("KEY1", "value1")
-	os.Setenv("INPUT_KEY2", "value2")
+	os.Setenv("PLUGIN_KEY2", "value2")
 
 	// Test case 1: Testing "key2"
 	// Expected result: "value2"
