@@ -60,6 +60,7 @@ builds:
     ldflags:
       - -s -w
       - -X main.Version={{.Version}}
+      - -X main.Commit={{.ShortCommit}}
     binary: >-
       {{ .ProjectName }}-
       {{- if .IsSnapshot }}{{ .Branch }}-

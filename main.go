@@ -13,14 +13,22 @@ import (
 )
 
 var (
-	secrets = make(map[string]string)
-	Version string
+	secrets     = make(map[string]string)
+	showVersion bool
+	Version     string
+	Commit      string
 )
 
 func main() {
 	var envfile string
 	flag.StringVar(&envfile, "env-file", ".env", "Read in a file of environment variables")
+	flag.BoolVar(&showVersion, "version", false, "Show version")
 	flag.Parse()
+
+	if showVersion {
+		fmt.Printf("Version: %s Commit: %s\n", Version, Commit)
+		return
+	}
 
 	_ = godotenv.Load(envfile)
 
