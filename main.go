@@ -4,6 +4,7 @@ import (
 	"context"
 	"flag"
 	"fmt"
+	"log/slog"
 	"os"
 	"strings"
 
@@ -60,7 +61,7 @@ func main() {
 	if err != nil {
 		panic("get user failed: " + err.Error())
 	}
-	fmt.Printf("login user: %s\n", user.Login)
+	slog.Info("login user", "user", user.Login)
 
 	orgValue := getGlobalValue("org_list")
 	orgList := strings.Split(orgValue, ",")
@@ -103,7 +104,7 @@ func main() {
 				}); err != nil {
 					panic("update org secret failed: " + err.Error())
 				}
-				fmt.Printf("org: %s, update secret key: %s\n", org, k)
+				slog.Info("update org secret", "org", org, "key", k)
 				continue
 			}
 
@@ -115,7 +116,7 @@ func main() {
 			}); err != nil {
 				panic("delete org secret failed: " + err.Error())
 			}
-			fmt.Printf("org: %s, create secret key: %s\n", org, k)
+			slog.Info("create org secret", "org", org, "key", k)
 		}
 	}
 
@@ -148,18 +149,18 @@ func main() {
 				}); err != nil {
 					panic("update repo secret failed: " + err.Error())
 				}
-				fmt.Printf("repo: %s, update secret key: %s\n", repo, k)
+				slog.Info("update repo secret", "repo", repo, "key", k)
 				continue
 			}
 
-			// create org secret
+			// create repo secret
 			if _, err := client.SecretCreate(owner, name, &drone.Secret{
 				Name: k,
 				Data: v,
 			}); err != nil {
 				panic("delete repo secret failed: " + err.Error())
 			}
-			fmt.Printf("repo: %s, update secret key: %s\n", repo, k)
+			slog.Info("create repo secret", "repo", repo, "key", k)
 		}
 	}
 }
