@@ -63,11 +63,14 @@ func main() {
 	}
 	slog.Info("login user", "user", user.Login)
 
+	// get global secrets
 	orgValue := getGlobalValue("org_list")
-	orgList := strings.Split(orgValue, ",")
 	repoValue := getGlobalValue("repo_list")
-	repoList := strings.Split(repoValue, ",")
 	keyValue := getGlobalValue("key_list")
+
+	// split org, repo, key
+	orgList := strings.Split(orgValue, ",")
+	repoList := strings.Split(repoValue, ",")
 	keyList := strings.Split(keyValue, ",")
 
 	for _, key := range keyList {
