@@ -1,11 +1,14 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"fmt"
 	"log/slog"
 	"os"
+	"os/signal"
 	"strings"
+	"syscall"
 
 	"github.com/joho/godotenv"
 )
@@ -16,6 +19,28 @@ var (
 	Version     string
 	Commit      string
 )
+
+func toBool(value string) bool {
+	return strings.ToLower(value) == "true"
+}
+
+func withContextFunc(ctx context.Context, f func()) context.Context {
+	ctx, cancel := context.WithCancel(ctx)
+	go func() {
+		c := make(chan os.Signal, 1)
+		signal.Notify(c, syscall.SIGINT, syscall.SIGTERM)
+		defer signal.Stop(c)
+
+		select {
+		case <-ctx.Done():
+		case <-c:
+			cancel()
+			f()
+		}
+	}()
+
+	return ctx
+}
 
 func main() {
 	var envfile string
@@ -29,6 +54,8 @@ func main() {
 	}
 
 	_ = godotenv.Load(envfile)
+
+	ctx := withContextFunc(context.Background(), func() {})
 
 	token := getGlobalValue("drone_token")
 	host := getGlobalValue("drone_server")
@@ -48,6 +75,11 @@ func main() {
 		panic("get user failed: " + err.Error())
 	}
 	slog.Info("login user", "user", user.Login)
+
+	giteaServer := getGlobalValue("gitea_server")
+	giteaToken := getGlobalValue("gitea_token")
+	giteaSkip := getGlobalValue("gitea_skip_verify")
+	syncToGitea := toBool(getGlobalValue("sync_to_gitea"))
 
 	// get global secrets
 	orgValue := getGlobalValue("org_list")
@@ -70,6 +102,20 @@ func main() {
 		secrets[key] = value
 	}
 
+	if syncToGitea {
+		_, err := newGiteaClient(
+			ctx,
+			giteaServer,
+			giteaToken,
+			toBool(giteaSkip),
+			slog.New(slog.NewTextHandler(os.Stdout, nil)),
+		)
+		if err != nil {
+			slog.Error("failed to init gitea client", "error", err)
+			return
+		}
+		return
+	}
 	syncToDrone(droneClient, orgList, repoList, secrets)
 }
 
