@@ -103,7 +103,7 @@ func main() {
 	}
 
 	if syncToGitea {
-		_, err := newGiteaClient(
+		g, err := newGiteaClient(
 			ctx,
 			giteaServer,
 			giteaToken,
@@ -114,8 +114,16 @@ func main() {
 			slog.Error("failed to init gitea client", "error", err)
 			return
 		}
+
+		err = g.syncSecret(droneClient, orgList, repoList, secrets)
+		if err != nil {
+			slog.Error("failed to sync secret to gitea", "error", err)
+			return
+		}
 		return
 	}
+
+	// sync to drone
 	syncToDrone(droneClient, orgList, repoList, secrets)
 }
 
