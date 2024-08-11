@@ -33,15 +33,14 @@ func (g *gitea) init() error {
 		gsdk.SetToken(g.token),
 	}
 
-	if g.skipVerify {
-		// add new http client for skip verify
-		httpClient := &http.Client{
-			Transport: &http.Transport{
-				TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
-			},
-		}
-		opts = append(opts, gsdk.SetHTTPClient(httpClient))
+	// add new http client for skip verify
+	httpClient := &http.Client{
+		Transport: &http.Transport{
+			TLSClientConfig: &tls.Config{InsecureSkipVerify: g.skipVerify},
+			Proxy:           http.ProxyFromEnvironment,
+		},
 	}
+	opts = append(opts, gsdk.SetHTTPClient(httpClient))
 
 	client, err := gsdk.NewClient(g.server, opts...)
 	if err != nil {
