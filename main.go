@@ -68,7 +68,8 @@ func main() {
 		panic("missing drone token")
 	}
 
-	droneClient := newDroneClient(host, token)
+	droneClient := newDroneClient(host, token, toBool(getGlobalValue("drone_skip_verify")))
+
 	// gets the current user
 	user, err := droneClient.Self()
 	if err != nil {
@@ -115,7 +116,7 @@ func main() {
 			return
 		}
 
-		err = g.syncSecret(droneClient, orgList, repoList, secrets)
+		err = g.syncSecret(orgList, repoList, secrets)
 		if err != nil {
 			slog.Error("failed to sync secret to gitea", "error", err)
 			return

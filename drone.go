@@ -2,14 +2,21 @@ package main
 
 import (
 	"context"
+	"crypto/tls"
+	"fmt"
 	"log/slog"
+	"net/http"
 	"strings"
 
 	"github.com/drone/drone-go/drone"
 	"golang.org/x/oauth2"
 )
 
-func newDroneClient(host, token string) drone.Client {
+func newDroneClient(host, token string, skipVerify bool) drone.Client {
+	tlsConfig := &tls.Config{
+		InsecureSkipVerify: skipVerify,
+	}
+
 	// create an http client with oauth authentication.
 	cfg := new(oauth2.Config)
 	auther := cfg.Client(
@@ -19,6 +26,15 @@ func newDroneClient(host, token string) drone.Client {
 		},
 	)
 
+	auther.CheckRedirect = func(*http.Request, []*http.Request) error {
+		return fmt.Errorf("Attempting to redirect the requests. Did you configure the correct drone server address?")
+	}
+
+	trans, _ := auther.Transport.(*oauth2.Transport)
+	trans.Base = &http.Transport{
+		TLSClientConfig: tlsConfig,
+		Proxy:           http.ProxyFromEnvironment,
+	}
 	// create the drone client with authenticator
 	return drone.NewClient(host, auther)
 }

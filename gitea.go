@@ -9,7 +9,6 @@ import (
 	"strings"
 
 	gsdk "code.gitea.io/sdk/gitea"
-	"github.com/drone/drone-go/drone"
 )
 
 // gitea is a struct that holds the gitea client.
@@ -54,27 +53,14 @@ func (g *gitea) init() error {
 }
 
 func (g *gitea) syncSecret(
-	client drone.Client,
 	orgList []string,
 	repoList []string,
 	secrets map[string]string,
 ) error {
+	slog.Info("orgList", "orgList", orgList)
 	// update org secrets
 	for _, org := range orgList {
-		// get all org secrets
-		secretMaps := make(map[string]string)
-		allSecrets, err := client.OrgSecretList(org)
-		if err != nil {
-			panic("get org secret failed: " + err.Error())
-		}
-		for _, secret := range allSecrets {
-			secretMaps[secret.Name] = secret.Data
-		}
-
 		for k, v := range secrets {
-			if _, ok := secretMaps[k]; !ok {
-				continue
-			}
 			_, err := g.client.CreateOrgActionSecret(org, gsdk.CreateSecretOption{
 				Name: k,
 				Data: v,
@@ -96,20 +82,7 @@ func (g *gitea) syncSecret(
 		owner := val[0]
 		name := val[1]
 
-		// get all org secrets
-		secretMaps := make(map[string]string)
-		allSecrets, err := client.SecretList(owner, name)
-		if err != nil {
-			panic("get repo secret failed: " + err.Error())
-		}
-		for _, secret := range allSecrets {
-			secretMaps[secret.Name] = secret.Data
-		}
-
 		for k, v := range secrets {
-			if _, ok := secretMaps[k]; !ok {
-				continue
-			}
 			_, err := g.client.CreateRepoActionSecret(owner, name, gsdk.CreateSecretOption{
 				Name: k,
 				Data: v,
