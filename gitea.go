@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"crypto/tls"
+	"crypto/x509"
 	"errors"
 	"log/slog"
 	"net/http"
@@ -34,10 +35,14 @@ func (g *gitea) init() error {
 	}
 
 	// add new http client for skip verify
+	certs, _ := x509.SystemCertPool()
 	httpClient := &http.Client{
 		Transport: &http.Transport{
-			TLSClientConfig: &tls.Config{InsecureSkipVerify: g.skipVerify},
-			Proxy:           http.ProxyFromEnvironment,
+			TLSClientConfig: &tls.Config{
+				RootCAs:            certs,
+				InsecureSkipVerify: g.skipVerify,
+			},
+			Proxy: http.ProxyFromEnvironment,
 		},
 	}
 	opts = append(opts, gsdk.SetHTTPClient(httpClient))

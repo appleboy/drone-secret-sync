@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"crypto/tls"
+	"crypto/x509"
 	"fmt"
 	"log/slog"
 	"net/http"
@@ -13,7 +14,9 @@ import (
 )
 
 func newDroneClient(host, token string, skipVerify bool) drone.Client {
+	certs, _ := x509.SystemCertPool()
 	tlsConfig := &tls.Config{
+		RootCAs:            certs,
 		InsecureSkipVerify: skipVerify,
 	}
 
