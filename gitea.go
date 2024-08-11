@@ -57,7 +57,6 @@ func (g *gitea) syncSecret(
 	repoList []string,
 	secrets map[string]string,
 ) error {
-	slog.Info("orgList", "orgList", orgList)
 	// update org secrets
 	for _, org := range orgList {
 		for k, v := range secrets {
