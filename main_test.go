@@ -1,14 +1,13 @@
 package main
 
 import (
-	"os"
 	"testing"
 )
 
 func TestGetGlobalValue(t *testing.T) {
 	// Simulate environment variables
-	os.Setenv("KEY1", "value1")
-	os.Setenv("PLUGIN_KEY2", "value2")
+	t.Setenv("KEY1", "value1")
+	t.Setenv("PLUGIN_KEY2", "value2")
 
 	// Test case 1: Testing "key2"
 	// Expected result: "value2"

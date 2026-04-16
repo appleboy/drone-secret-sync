@@ -30,7 +30,7 @@ func newDroneClient(host, token string, skipVerify bool) drone.Client {
 	)
 
 	auther.CheckRedirect = func(*http.Request, []*http.Request) error {
-		return fmt.Errorf("Attempting to redirect the requests. Did you configure the correct drone server address?")
+		return fmt.Errorf("attempting to redirect the requests; did you configure the correct drone server address?")
 	}
 
 	trans, _ := auther.Transport.(*oauth2.Transport)
