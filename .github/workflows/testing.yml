@@ -27,16 +27,19 @@ jobs:
 
   testing:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        go-version: ["1.25", "1.26"]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
-      - name: Setup go
+      - name: Setup go ${{ matrix.go-version }}
         uses: actions/setup-go@v6
         with:
-          go-version-file: go.mod
+          go-version: ${{ matrix.go-version }}
           check-latest: true
 
       - name: testing
