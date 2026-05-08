@@ -1,6 +1,6 @@
 module github.com/appleboy/drone-secret-sync
 
-go 1.25.9
+go 1.25.10
 
 require (
 	code.gitea.io/sdk/gitea v0.19.0
