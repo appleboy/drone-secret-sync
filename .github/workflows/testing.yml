@@ -14,7 +14,7 @@ jobs:
           go-version: "^1"
           check-latest: true
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Setup golangci-lint
         uses: golangci/golangci-lint-action@v9
         with:
@@ -33,7 +33,7 @@ jobs:
         go-version: ["1.25", "1.26"]
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
