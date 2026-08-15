@@ -18,7 +18,7 @@ This package uses the Drone API to synchronize secrets across multiple organizat
 Create a `.env` file with the following content. You can also use the `export` command to set the environment variables.
 
 ```sh
-DRONE_SERVER=https://cloud.drone.io
+DRONE_SERVER=https://drone.example.com
 DRONE_TOKEN=xxxxx
 ORG_LIST=appleboy
 REPO_LIST=go-training/golang-in-ecr-ecs,go-training/drone-git-push-example
