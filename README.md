@@ -1,5 +1,6 @@
 # drone-secret-sync
 
+[![GoDoc](https://pkg.go.dev/badge/github.com/appleboy/drone-secret-sync.svg)](https://pkg.go.dev/github.com/appleboy/drone-secret-sync)
 [![Lint and Testing](https://github.com/appleboy/drone-secret-sync/actions/workflows/testing.yml/badge.svg)](https://github.com/appleboy/drone-secret-sync/actions/workflows/testing.yml)
 [![Trivy Security Scan](https://github.com/appleboy/drone-secret-sync/actions/workflows/trivy.yml/badge.svg?branch=main)](https://github.com/appleboy/drone-secret-sync/actions/workflows/trivy.yml)
 
