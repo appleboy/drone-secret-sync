@@ -21,7 +21,7 @@ var (
 )
 
 func toBool(value string) bool {
-	return strings.ToLower(value) == "true"
+	return strings.EqualFold(value, "true")
 }
 
 func withContextFunc(ctx context.Context, f func()) context.Context {
@@ -49,7 +49,12 @@ func main() {
 	flag.Parse()
 
 	if showVersion {
-		fmt.Printf("Version: %s Commit: %s\n", Version, Commit)
+		//nolint:forbidigo // Preserve the plugin CLI output format on stdout.
+		fmt.Printf(
+			"Version: %s Commit: %s\n",
+			Version,
+			Commit,
+		)
 		return
 	}
 
@@ -90,9 +95,9 @@ func main() {
 	// split org, repo, key
 	orgList := strings.Split(orgValue, ",")
 	repoList := strings.Split(repoValue, ",")
-	keyList := strings.Split(keyValue, ",")
+	keyList := strings.SplitSeq(keyValue, ",")
 
-	for _, key := range keyList {
+	for key := range keyList {
 		// check value is empty
 		value := getGlobalValue(key)
 		if value == "" {

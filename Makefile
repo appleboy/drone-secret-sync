@@ -1,5 +1,6 @@
 EXECUTABLE := drone-secret-sync
 GO ?= go
+TOOLS_MOD := -modfile=go.tools.mod
 SHASUM ?= shasum -a 256
 GOFILES := $(shell find . -name "*.go" -type f)
 HAS_GO = $(shell hash $(GO) > /dev/null 2>&1 && echo "GO" || echo "NOGO" )
@@ -70,3 +71,17 @@ clean:
 
 version:
 	@echo $(VERSION)
+
+fmt:
+	$(GO) tool $(TOOLS_MOD) golangci-lint fmt
+
+fmt-check:
+	$(GO) tool $(TOOLS_MOD) golangci-lint fmt --diff --diff-colored=false
+
+lint:
+	$(GO) tool $(TOOLS_MOD) golangci-lint run
+
+install-tools:
+	$(GO) mod download $(TOOLS_MOD)
+
+.PHONY: fmt fmt-check lint install-tools

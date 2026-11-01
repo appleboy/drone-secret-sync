@@ -56,6 +56,7 @@ func (g *gitea) init() error {
 	return nil
 }
 
+//nolint:unparam // Preserve the caller contract: individual sync failures are logged and processing continues.
 func (g *gitea) syncSecret(
 	orgList []string,
 	repoList []string,
