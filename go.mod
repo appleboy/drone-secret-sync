@@ -3,16 +3,17 @@ module github.com/appleboy/drone-secret-sync
 go 1.26.10
 
 require (
-	code.gitea.io/sdk/gitea v0.19.0
+	code.gitea.io/sdk/gitea v0.25.1
 	github.com/drone/drone-go v1.7.1
 	github.com/joho/godotenv v1.5.1
-	golang.org/x/oauth2 v0.27.0
+	golang.org/x/oauth2 v0.37.0
 )
 
 require (
+	github.com/42wim/httpsig v1.3.0 // indirect
 	github.com/davidmz/go-pageant v1.0.2 // indirect
 	github.com/go-fed/httpsig v1.1.0 // indirect
-	github.com/hashicorp/go-version v1.7.0 // indirect
-	golang.org/x/crypto v0.55.0 // indirect
-	golang.org/x/sys v0.47.0 // indirect
+	github.com/hashicorp/go-version v1.9.0 // indirect
+	golang.org/x/crypto v0.58.0 // indirect
+	golang.org/x/sys v0.49.0 // indirect
 )

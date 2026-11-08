@@ -65,8 +65,7 @@ func (g *gitea) syncSecret(
 	// update org secrets
 	for _, org := range orgList {
 		for k, v := range secrets {
-			_, err := g.client.CreateOrgActionSecret(org, gsdk.CreateSecretOption{
-				Name: k,
+			_, err := g.client.CreateOrgActionSecret(org, k, gsdk.CreateOrUpdateSecretOption{
 				Data: v,
 			})
 			if err != nil {
@@ -87,10 +86,14 @@ func (g *gitea) syncSecret(
 		name := val[1]
 
 		for k, v := range secrets {
-			_, err := g.client.CreateRepoActionSecret(owner, name, gsdk.CreateSecretOption{
-				Name: k,
-				Data: v,
-			})
+			_, err := g.client.CreateRepoActionSecret(
+				owner,
+				name,
+				k,
+				gsdk.CreateOrUpdateSecretOption{
+					Data: v,
+				},
+			)
 			if err != nil {
 				slog.Error("failed to update repo secrets", "repo", repo, "key", k, "error", err)
 				continue
