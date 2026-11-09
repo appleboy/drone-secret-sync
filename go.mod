@@ -6,7 +6,7 @@ require (
 	code.gitea.io/sdk/gitea v0.25.1
 	github.com/drone/drone-go v1.7.1
 	github.com/joho/godotenv v1.5.1
-	golang.org/x/oauth2 v0.37.0
+	golang.org/x/oauth2 v0.38.0
 )
 
 require (
